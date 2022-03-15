@@ -13,19 +13,26 @@ syn match   aqlError        ",\(\_\s*[;)]\)\@=" " Comma before a paren or semico
 
 " Special words.
 syn keyword aqlSpecial      false null true
+syn keyword aqlSpecial      keep count options prune search to
+
+" (case sensitive)
+syn case match
+syn keyword aqlSpecial      NEW OLD CURRENT
+syn case ignore
 
 " Keywords.
 syn keyword aqlKeyword      aggregate all and any asc collect desc distinct
 syn keyword aqlKeyword      false filter for graph in inbound insert into
-syn keyword aqlKeyword      let limit none not null or outbound remove
-syn keyword aqlKeyword      replace return shortest_path sort true update
-syn keyword aqlKeyword      upsert with 
-
-" Operators
-syn match   aqlOperator     "||\|:="
+syn keyword aqlKeyword      k_paths k_shortest_paths let like limit none not null
+syn keyword aqlKeyword      or outbound remove replace return shortest_path
+syn keyword aqlKeyword      sort true update upsert with window
 
 " Conditionals
-syn match   aqlConditional  "=\|<\|>\|+\|-"
+syn match   aqlConditional  "[!=][=~]\|>=\|<=\|<\|>"
+
+" Operators
+syn match   aqlOperator     "||\|&&\|::\|+\|-"
+syn match   aqlOperator     "=[=~]\@!"
 
 " Unknown functions.
 syn match   aqlUnknownFunc  "\<\w\+(\@="
@@ -33,28 +40,37 @@ syn match   aqlUnknownFunc  "\<\w\+(\@="
 " Functions - Only valid with a '(' after them.
 "    Type cast functios
 syn match   aqlFunction     "\<\(to_bool\|to_number\|to_string\|to_array\|to_list\)(\@="
-syn match   aqlFunction     "\<\(is_null\|is_bool\|is_number\|is_string\|is_array\)(\@="
+syn match   aqlFunction     "\<\(is_null\|is_bool\|is_number\|is_string\|is_array\|is_key\)(\@="
 syn match   aqlFunction     "\<\(is_list\|is_object\|is_document\|is_datestring\|typename\)(\@="
 "    String functions
 syn match   aqlFunction     "\<\(char_length\|concat\|concat_separator\|contains\|count\)(\@="
-syn match   aqlFunction     "\<\(find_first\|find_last\|left\|length\|like\)(\@="
-syn match   aqlFunction     "\<\(lower\|ltrim\|md5\|random_token\|regex_test\)(\@="
-syn match   aqlFunction     "\<\(right\|reverse\|rtrim\|sha1\|split\)(\@="
-syn match   aqlFunction     "\<\(substitute\|substring\|trim\|upper\)(\@="
+syn match   aqlFunction     "\<\(crc32\|find_first\|find_last\|fnv64\|ipv4_from_number\|ipv4_to_number\)(\@="
+syn match   aqlFunction     "\<\(is_ipv4\|json_parse\|json_stringify\|left\|length\|levenshtein_distance\)(\@="
+syn match   aqlfunction     "\<\(like\|lower\|ltrim\|md5\)(\@="
+syn match   aqlfunction     "\<\(ngram_positional_similarity\|ngram_similarity\)(\@="
+syn match   aqlfunction     "\<\(random_token\|regex_matches\|regex_split\|regex_test\|regex_replace\)(\@="
+syn match   aqlFunction     "\<\(reverse\|right\|rtrim\|sha1\|sha512\|soundex\|split\)(\@="
+syn match   aqlFunction     "\<\(starts_with\|substitute\|substring\|tokens\)(\@="
+syn match   aqlFunction     "\<\(to_base64\|to_hex\|trim\|upper\|uuid\)(\@="
 "    Numeric
-syn match   aqlFunction     "\<\(abs\|acos\|asin\|atan\|atan2\?\|average\|ceil\)(\@="
-syn match   aqlFunction     "\<\(cos\|degrees\|exp\|exp2\|floor\|log\|log2\?\)(\@="
-syn match   aqlFunction     "\<\(log10\|max\|median\|min\|percentile\|pi\)(\@="
-syn match   aqlFunction     "\<\(pow\|radians\|rand\|range\|round\|sin\)(\@="
-syn match   aqlFunction     "\<\(sqrt\|stddev_population\|stddev_sample\|sum\|tan\)(\@="
-syn match   aqlFunction     "\<\(variance_population\|variance_sample\)(\@="
+syn match   aqlFunction     "\<\(abs\|acos\|asin\|atan2\?\|average\|avg\|ceil\)(\@="
+syn match   aqlFunction     "\<\(cos\|cosine_similarity\|decay_gauss\|decay_exp\|decay_linear\?\)(\@="
+syn match   aqlFunction     "\<\(degrees\|exp2\?\|floor\|log2\?\)(\@="
+syn match   aqlFunction     "\<\(log10\|l[12]_distance\|max\|median\|min\|percentile\|pi\)(\@="
+syn match   aqlFunction     "\<\(pow\|product\|radians\|rand\|range\|round\|sin\)(\@="
+syn match   aqlFunction     "\<\(sqrt\|stddev_population\|stddev_sample\|stddev\|sum\|tan\)(\@="
+syn match   aqlFunction     "\<\(variance_population\|variance_sample\|variance\)(\@="
+"    Bit
+syn match   aqlFunction     "\<\(bit_and\|bit_construct\|bit_deconstruct\|bit_from_string\)(\@="
+syn match   aqlFunction     "\<\(bit_negate\|bit_or\|bit_popcount\|bit_shift_left\|bit_shift_right\)(\@="
+syn match   aqlFunction     "\<\(bit_test\|bit_to_string\|bit_xor\)(\@="
 "    Date
 syn match   aqlFunction     "\<\(date_now\|date_timestamp\|date_iso8601\|is_datestring\)(\@="
 syn match   aqlFunction     "\<\(date_dayofweek\|date_year\|date_month\|date_hour\)(\@="
 syn match   aqlFunction     "\<\(date_minute\|date_second\|date_millisecond\|date_dayofyear\)(\@="
 syn match   aqlFunction     "\<\(date_isoweek\|date_leapyear\|date_quarter\|date_days_in_month\)(\@="
 syn match   aqlFunction     "\<\(date_format\|date_add\|date_subtract\|date_diff\)(\@="
-syn match   aqlFunction     "\<\(date_compare\)(\@="
+syn match   aqlFunction     "\<\(date_compare\|date_utctolocal\|date_localtoutc\|date_timezone\|date_timezones\)(\@="
 "    Array
 syn match   aqlFunction     "\<\(append\|count\|first\|flatten\|intersection\)(\@="
 syn match   aqlFunction     "\<\(last\|length\|minus\|nth\|pop\|position\|push\)(\@="
@@ -66,17 +82,25 @@ syn match   aqlFunction     "\<\(matches\|merge\|merge_recursive\|parse_identifi
 syn match   aqlFunction     "\<\(unset_recursive\|values\|zip\)(\@="
 "    Geo
 syn match   aqlFunction     "\<\(near\|within\|within_rectangle\|is_in_polygon\)(\@="
+syn match   aqlFunction     "\<\(distance\|geo_contains\|geo_distance\|geo_area\|geo_equals\)(\@="
+syn match   aqlFunction     "\<\(geo_intersects\|geo_in_range\|geo_linestring\|geo_multilinestring\)(\@="
+syn match   aqlFunction     "\<\(geo_multipoint\|geo_point\|geo_polygon\|geo_multipolygon\)(\@="
 "    Fulltext Indexes
 syn match   aqlFunction     "\<\(fulltext\)(\@="
+"    ArangoSearch
+syn match   aqlFunction     "\<\(analyzer\|boost\|exists\|in_range\|min_match\|ngram_match\|phrase\)(\@="
+syn match   aqlFunction     "\<\(starts_with\|levenshtein_match\|like\|bm25\|tfidf\)(\@="
 "    Misc
 syn match   aqlFunction     "\<\(not_null\|first_list\|first_document\|collection_count\|collections\)(\@="
-syn match   aqlFunction     "\<\(count\|current_user\|document\|length\|hash\)(\@="
-syn match   aqlFunction     "\<\(apply\|call\|fail\|noopt\|passthru\|sleep\|v8\)(\@="
+syn match   aqlFunction     "\<\(check_document\|count\|current_user\|decode_rev\|shard_id\|document\)(\@="
+syn match   aqlFunction     "\<\(length\|hash\|apply\|call\|assert\|warn\|in_range\)(\@="
+syn match   aqlFunction     "\<\(pregel_result\|fail\|noopt\|noeval\|passthru\)(\@="
+syn match   aqlFunction     "\<\(schema_get\|schema_validate\|sleep\|v8\|version\)(\@="
 
 " Strings
-syn region aqlString        start=+"+  skip=+\\\\\|\\"+  end=+"+ 
-syn region aqlString        start=+'+  skip=+\\\\\|\\'+  end=+'+ 
-syn region aqlString        start=+`+  skip=+\\\\\|\\`+  end=+`+ 
+syn region aqlString        start=+"+  skip=+\\\\\|\\"+  end=+"+
+syn region aqlString        start=+'+  skip=+\\\\\|\\'+  end=+'+
+syn region aqlString        start=+`+  skip=+\\\\\|\\`+  end=+`+
 
 " Numbers
 syn match aqlNumber         "-\=\<[0-9]*\>"
@@ -90,6 +114,7 @@ syn keyword aqlTodo         contained DEBUG FIXME NOTE TODO XXX
 
 " Comments
 syn match  aqlComment       "//.*"
+syn region aqlComment       start="/\*" end="\*/"
 
 " Mark correct paren use. Different colors for different purposes.
 syn region  aqlParens       transparent matchgroup=aqlParen start="(" end=")"
