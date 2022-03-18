@@ -121,6 +121,9 @@ syn region  aqlParens       transparent matchgroup=aqlParen start="(" end=")"
 syn match   aqlParenEmpty   "()"
 syn region  aqlParens       transparent matchgroup=aqlParenFunc start="\(\<\w\+\>\)\@<=(" end=")"
 
+" Bind variables
+syn match   aqlBindVariable "@@\?\w\+"
+
 " Stolen from sh.vim.
 if !exists("sh_minlines")
   let sh_minlines = 200
@@ -150,6 +153,7 @@ if version >= 508 || !exists("did_aql_syn_inits")
     HiLink aqlParen         Comment
     HiLink aqlParenEmpty    Operator
     HiLink aqlParenFunc     Function
+    HiLink aqlBindVariable  Identifier
     HiLink aqlSpecial       Keyword
     HiLink aqlString        String
     HiLink aqlTodo          Todo
